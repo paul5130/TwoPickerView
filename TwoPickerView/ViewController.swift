@@ -17,7 +17,8 @@ class ViewController: UIViewController {
         return tv
     }()
     var cities = [City]()
-    var districtNumber = 0
+    private var selectRow1 = 0
+    private var selectRow2 = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -51,7 +52,7 @@ extension ViewController: UIPickerViewDataSource,UIPickerViewDelegate{
         case 0:
             return cities.count
         case 1:
-            return cities[districtNumber].district.count
+            return cities[selectRow1].district.count
         default:
             return 0
         }
@@ -59,10 +60,9 @@ extension ViewController: UIPickerViewDataSource,UIPickerViewDelegate{
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch component {
         case 0:
-            districtNumber = row
             return cities[row].city
         case 1:
-            return cities[districtNumber].district[row]
+            return cities[selectRow1].district[row]
         default:
             return nil
         }
@@ -70,12 +70,14 @@ extension ViewController: UIPickerViewDataSource,UIPickerViewDelegate{
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch component {
         case 0:
-            pickerView.reloadAllComponents()
             pickerView.selectRow(0, inComponent: 1, animated: true)
-            districtNumber = row
-            textfield.text = "縣市：" + cities[row].city
+            pickerView.reloadAllComponents()
+            selectRow1 = row
+            selectRow2 = 0
+            textfield.text = "縣市：" + cities[row].city + " 地區：" + cities[row].district[0]
         case 1:
-            textfield.text = "縣市：" + cities[districtNumber].city + " 地區：" + cities[districtNumber].district[row]
+            selectRow2 = row
+            textfield.text = "縣市：" + cities[selectRow1].city + " 地區：" + cities[selectRow1].district[selectRow2]
         default:
             print("Failed to select picker view . ")
         }
@@ -99,3 +101,21 @@ struct ViewController_Previews: PreviewProvider {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
